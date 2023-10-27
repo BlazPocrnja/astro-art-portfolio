@@ -8,7 +8,7 @@ import { calcCoveredTextureScale } from './utils/coveredTexture'
 
 export class TCanvas {
   private assets: Assets = {
-    image: { path: 'images/unsplash.jpg' },
+    image: { path: 'images/blaz_pocrnja_self_portrait.png' },
   }
 
   constructor(private container: HTMLElement) {

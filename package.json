@@ -10,14 +10,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^2.6.2",
-    "three": "^0.153.0"
+    "astro": "^3.4.0",
+    "three": "^0.157.0"
   },
   "devDependencies": {
-    "@types/three": "^0.152.1",
+    "@types/three": "^0.157.2",
     "autoprefixer": "^10.4.14",
-    "prettier": "^2.8.4",
-    "prettier-plugin-astro": "^0.8.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-astro": "^0.12.1",
     "ress": "^5.0.2",
     "sass": "^1.58.3",
     "vite-plugin-glsl": "^1.1.2"
