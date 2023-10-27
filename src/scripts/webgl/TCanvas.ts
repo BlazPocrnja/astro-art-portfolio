@@ -21,7 +21,6 @@ export class TCanvas {
 
   private init() {
     gl.setup(this.container)
-    gl.scene.background = new THREE.Color('#012')
     gl.camera.position.z = 1.5
   }
 
