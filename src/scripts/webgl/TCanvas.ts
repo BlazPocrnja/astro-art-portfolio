@@ -8,7 +8,7 @@ import { calcCoveredTextureScale } from './utils/coveredTexture'
 
 export class TCanvas {
   private assets: Assets = {
-    image: { path: 'images/blaz_pocrnja_self_portrait.png' },
+    image: { path: 'images/05_Pocrnja_Driftwood.jpg' },
   }
 
   constructor(private container: HTMLElement) {
@@ -26,10 +26,18 @@ export class TCanvas {
 
   private createObjects() {
     const texture = this.assets.image.data as THREE.Texture
-    const scale = calcCoveredTextureScale(texture, 1 / 1)
+    const aspectRatio = texture.image.width / texture.image.height
+    const scale = calcCoveredTextureScale(texture, aspectRatio)
 
-    const geometry = new THREE.PlaneGeometry(1, 1)
-    const material = new THREE.ShaderMaterial({
+    // Create a canvas with visible edges
+    const canvasWidth = aspectRatio
+    const canvasHeight = 1
+    const canvasDepth = 0.1
+
+    const canvasGeometry = new THREE.BoxGeometry(canvasWidth, canvasHeight, canvasDepth)
+
+    // Create a material for the front face with the image texture
+    const canvasMaterialFront = new THREE.ShaderMaterial({
       uniforms: {
         tImage: { value: texture },
         uUvScale: { value: new THREE.Vector2(scale[0], scale[1]) },
@@ -38,9 +46,37 @@ export class TCanvas {
       fragmentShader,
       side: THREE.DoubleSide,
     })
-    const mesh = new THREE.Mesh(geometry, material)
 
-    gl.scene.add(mesh)
+    // Create a material for the other faces (edges)
+    const canvasMaterialEdges = new THREE.MeshBasicMaterial({ color: 0x000000 })
+
+    // Set material index 0 for all faces (default)
+    canvasGeometry.groups.forEach((face) => {
+      face.materialIndex = 1 // Set material index 1 for all faces
+    })
+
+    // Set material index 0 for the front face
+    canvasGeometry.groups[4].materialIndex = 0
+
+    // Assign materials to different faces of the box
+    const canvasMaterials = [
+      canvasMaterialFront, // Material for the front face (texture)
+      canvasMaterialEdges, // Material for the other faces (edges)
+    ]
+
+    // Create a mesh with the multi-material applied
+    const canvasMesh = new THREE.Mesh(canvasGeometry, canvasMaterials)
+    canvasMesh.position.z = -0.05 // Position slightly below the image plane to give the illusion of depth
+    gl.scene.add(canvasMesh)
+
+    // Create shadow
+    const shadowRadius = Math.max(canvasWidth, canvasHeight) * 0.6 
+    const shadowGeometry = new THREE.CircleGeometry(shadowRadius, 32)
+    const shadowMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.90, side: THREE.DoubleSide })
+    const shadowMesh = new THREE.Mesh(shadowGeometry, shadowMaterial)
+    shadowMesh.rotation.x = -Math.PI / 2 // Rotate to be parallel to the ground
+    shadowMesh.position.y = -0.75 // Position slightly below the canvas
+    gl.scene.add(shadowMesh)
   }
 
   // ----------------------------------
