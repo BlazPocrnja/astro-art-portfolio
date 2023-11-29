@@ -7,6 +7,7 @@ import fragmentShader from './shader/fs.glsl'
 import { calcCoveredTextureScale } from './utils/coveredTexture'
 
 export class TCanvas {
+  private isCameraMoving = false;
   private assets: Assets = {
     image: { path: 'images/05_Pocrnja_Driftwood.jpg' },
   }
@@ -15,6 +16,7 @@ export class TCanvas {
     loadAssets(this.assets).then(() => {
       this.init()
       this.createObjects()
+      this.handleCameraMovement()
       gl.requestAnimationFrame(this.anime)
     })
   }
@@ -77,6 +79,9 @@ export class TCanvas {
     shadowMesh.rotation.x = -Math.PI / 2 // Rotate to be parallel to the ground
     shadowMesh.position.y = -0.75 // Position slightly below the canvas
     gl.scene.add(shadowMesh)
+
+    // Start rotation animation
+    this.animateCanvasRotation(canvasMesh)
   }
 
   // ----------------------------------
@@ -85,6 +90,31 @@ export class TCanvas {
     controls.update()
     gl.render()
   }
+
+  private setCameraMovingStatus(value: boolean) {
+    this.isCameraMoving = value;
+  }
+
+  private animateCanvasRotation(canvasMesh) {
+    const animate = () => {
+      if (!this.isCameraMoving) {
+        canvasMesh.rotation.y += 0.01; // Adjust the rotation speed as needed
+        gl.render();
+        requestAnimationFrame(animate);
+      }
+    };
+    animate();
+  }
+
+  // Function to control camera movement
+  private handleCameraMovement() {
+    // Listen for camera movement events or user interaction
+    // For example, if using OrbitControls:
+    controls.addEventListener('change', () => {
+      this.setCameraMovingStatus(true);
+    });
+  }
+
 
   // ----------------------------------
   // dispose
