@@ -8,6 +8,7 @@ import { calcCoveredTextureScale } from './utils/coveredTexture'
 
 export class TCanvas {
   private isCameraMoving = false;
+  private isFirstChangeIgnored = false;
   private assets: Assets = {
     image: { path: 'images/05_Pocrnja_Driftwood.jpg' },
   }
@@ -108,10 +109,13 @@ export class TCanvas {
 
   // Function to control camera movement
   private handleCameraMovement() {
-    // Listen for camera movement events or user interaction
-    // For example, if using OrbitControls:
-    controls.addEventListener('change', () => {
-      this.setCameraMovingStatus(true);
+    controls.primitive.addEventListener('change', () => {
+      if (this.isFirstChangeIgnored) {
+        console.log("change after first");
+        this.setCameraMovingStatus(true);
+      } else {
+        this.isFirstChangeIgnored = true;
+      }
     });
   }
 
