@@ -111,7 +111,6 @@ export class TCanvas {
   private handleCameraMovement() {
     controls.primitive.addEventListener('change', () => {
       if (this.isFirstChangeIgnored) {
-        console.log("change after first");
         this.setCameraMovingStatus(true);
       } else {
         this.isFirstChangeIgnored = true;
