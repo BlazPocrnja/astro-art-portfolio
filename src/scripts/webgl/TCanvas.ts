@@ -136,26 +136,27 @@ export class TCanvas {
     this.toggleMeshDisplay(canvasMesh, wireframe)
 
     /*-----------GUI-----------*/
-    // const loader = new FontLoader()
-    // loader.load('../../../public/fonts/helvetiker_regular.typeface.json', function (font) {
-    //   const size = 0.1
+    const loader = new FontLoader()
+    loader.load('../../../public/fonts/helvetiker_regular.typeface.json', function (font) {
+      const size = 5
 
-    //   const labelgeo = new TextGeometry('Driftwood', {
-    //     font: font,
-    //     size: size,
-    //     height: size / 2,
-    //   })
+      const labelgeo = new TextGeometry('Driftwood', {
+        font: font,
+        size: size,
+        height: size / 2,
+      })
 
-    //   labelgeo.computeBoundingSphere()
+      labelgeo.computeBoundingSphere()
 
-    //   const material = new THREE.MeshPhongMaterial({ color: 0xff174d, shininess: 100, side: THREE.DoubleSide })
+      const material = new THREE.MeshPhongMaterial({ color: 0xff174d, shininess: 100, side: THREE.DoubleSide })
 
-    //   const group = new THREE.Group()
-    //   gl.scene.add(group)
+      const group = new THREE.Group()
+      gl.scene.add(group)
 
-    //   const textmesh = new THREE.Mesh(labelgeo, material)
-    //   group.add(textmesh)
-    // })
+      const textmesh = new THREE.Mesh(labelgeo, material)
+      textmesh.position.z = -50
+      group.add(textmesh)
+    })
   }
 
   // ----------------------------------
